@@ -29,17 +29,23 @@ ul {
     list-style: none;
 }
 
-/* Header Styles */
+/* Header Section */
 header {
-    background-color: #000;
-    color: #fff;
     position: fixed;
-    width: 100%;
     top: 0;
     left: 0;
-    z-index: 1000;
-    padding: 15px 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    width: 100%;
+    z-index: 1000; /* 最前面に表示 */
+    background-color: rgba(0, 0, 0, 0.7); /* 半透明の黒背景 */
+    backdrop-filter: blur(10px); /* 背景をぼかす効果 (一部ブラウザ対応) */
+    transition: background-color 0.3s ease; /* 背景色変更を滑らかに */
+    padding: 15px 0; /* 上下のパディングを調整 */
+}
+
+/* スクロール時にヘッダー背景を不透明にする（オプション） */
+/* このJavaScriptも必要になります */
+.header-scrolled { /* このクラスを有効にします */
+    background-color: #000; /* スクロールしたら完全に不透明な黒 */
 }
 
 .header-content {
@@ -48,64 +54,115 @@ header {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px; /* 左右のパディングを調整 */
 }
 
 .logo img {
-    height: 40px; /* Adjust as needed */
+    height: 35px; /* ロゴの高さ調整 */
+    object-fit: contain;
 }
 
 .main-nav ul {
+    list-style: none;
     display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 .main-nav ul li {
-    margin-left: 30px;
+    margin-left: 40px; /* メニュー項目間のスペース */
 }
 
 .main-nav ul li a {
-    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1em; /* フォントサイズ調整 */
+    font-weight: 500; /* 少し太字 */
+    padding: 5px 0;
+    position: relative;
     transition: color 0.3s ease;
 }
 
 .main-nav ul li a:hover {
-    color: #aaa;
+    color: #ddd; /* ホバー時の色を控えめに */
 }
 
+/* ホバー時の下線アニメーション (Apple風の控えめな表現) */
+.main-nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #fff; /* 下線の色 */
+    transition: width 0.3s ease-out;
+}
+
+.main-nav ul li a:hover::after {
+    width: 100%;
+}
+
+/* ハンバーガーメニューはモバイル表示時のみ表示されるように */
 .hamburger-menu {
-    display: none; /* Hidden on desktop */
+    display: none; /* デフォルトは非表示 */
     background: none;
     border: none;
     color: #fff;
-    font-size: 28px;
+    font-size: 1.8em;
     cursor: pointer;
+    z-index: 1001; /* モバイルナビの上に表示 */
 }
 
+/* モバイルナビゲーション（非表示状態） */
 .mobile-nav {
-    display: none; /* Hidden by default, controlled by JS */
-    background-color: #111;
-    width: 100%;
-    text-align: center;
-    padding-bottom: 10px;
+    display: none; /* 初期状態は非表示 */
+    position: fixed;
+    top: 0;
+    right: -100%; /* 画面外に隠す */
+    width: 70%; /* 幅 */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95); /* 半透明の黒 */
+    backdrop-filter: blur(15px);
+    z-index: 999;
+    transition: right 0.4s ease-in-out; /* スライドアニメーション */
+    padding-top: 80px; /* ヘッダーの高さ分スペース */
 }
 
 .mobile-nav.active {
-    display: block;
+    right: 0; /* アクティブ時に画面内にスライドイン */
+    display: block; /* アクティブ時に表示 */
 }
 
-.mobile-nav ul li {
-    padding: 10px 0;
-    border-bottom: 1px solid #333;
-}
-
-.mobile-nav ul li:last-child {
-    border-bottom: none;
+.mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .mobile-nav ul li a {
     display: block;
-    padding: 10px 0;
-    font-size: 1.1em;
+    padding: 15px 30px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.mobile-nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* メディアクエリ（レスポンシブデザイン用） */
+@media (max-width: 768px) {
+    .main-nav {
+        display: none; /* デスクトップ用ナビを非表示に */
+    }
+
+    .hamburger-menu {
+        display: block; /* ハンバーガーメニューを表示 */
+    }
 }
 
 /* Hero Section */
@@ -581,4 +638,20 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+/* css/style.css の既存のCSSの最後に追加 */
+
+/* セクションが画面外にあるときの初期状態（非表示） */
+.fade-in-section {
+    opacity: 0; /* 最初は完全に透明 */
+    transform: translateY(20px); /* 少し下からスタート */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* 0.8秒かけて透明度と位置が変化 */
+    will-change: opacity, transform; /* アニメーションパフォーマンス最適化 */
+}
+
+/* セクションが画面内に入ったときのアクティブ状態（表示） */
+.fade-in-section.is-visible {
+    opacity: 1; /* 不透明になる */
+    transform: translateY(0); /* 元の位置に戻る */
 }

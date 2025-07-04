@@ -55,3 +55,40 @@ function changeHeroBackgroundSmoothly() { // (C)
     }
 }
 setInterval(changeHeroBackgroundSmoothly, 3000); // (G)
+
+// js/script.js の既存のJavaScriptコードの最後に追加
+
+// スクロールで要素をフェードインさせる機能
+const fadeInSections = document.querySelectorAll('.fade-in-section');
+
+const observerOptions = {
+    root: null, // ビューポートをルートとして使用
+    rootMargin: '0px',
+    threshold: 0.1 // 要素が10%見えたらコールバックを実行
+};
+
+const sectionObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // 要素がビューポートに入ったら
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // 一度表示されたら監視を停止
+        }
+    });
+}, observerOptions);
+
+fadeInSections.forEach(section => {
+    sectionObserver.observe(section);
+});
+
+// js/script.js の既存のJavaScriptコードの最後に追加
+
+// スクロール時のヘッダー背景変化
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) { // 50pxスクロールしたら
+        header.classList.add('header-scrolled');
+    } else {
+        header.classList.remove('header-scrolled');
+    }
+});
